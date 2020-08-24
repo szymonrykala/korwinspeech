@@ -4,15 +4,18 @@ window.addEventListener('load', main);
 
 function main() {
     const textDiv = document.querySelector('#text');
+    const input = document.querySelector('#word');
 
     loadData((data) => {
-        const sentenceData = getRandomText(data);
-        let sentence = '';
-        sentenceData.forEach(text => sentence += ` ${text.text}`);
-        
-        textDiv.innerHTML = sentence;
+        const word = input.value;
+        textDiv.innerHTML = word === '' ? randomSentence(data) : sentenceWith(word, data);
+
     });
 }
+
+const getPart = (data, part) => data[part][getRand(0, data[part].length - 1)].text;
+const randomSentence = (data) => `${getPart(data, 0)} ${getPart(data, 1)} ${getPart(data, 2)} ${getPart(data, 3)} ${getPart(data, 4)} ${getPart(data, 5)}`
+const getRand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 async function loadData(callback) {
     let data = JSON.parse(window.localStorage.getItem('korwinSpeechData'));
@@ -22,24 +25,37 @@ async function loadData(callback) {
         window.localStorage.setItem('korwinSpeechData', JSON.stringify(data));
         console.log("loaded from the web");
     }
-    
     return callback(data);
 }
 
-function getRandomText(data) {
-    const getPart = (data, part) => data[part][getRand(0, data[part].length-1)];
 
-    const sentence = [
-        getPart(data, 0),
-        getPart(data, 1),
-        getPart(data, 2),
-        getPart(data, 3),
-        getPart(data, 4),
-        getPart(data, 5)
-    ];
-    return sentence;
+function sentenceWith(word = "", data) {
+    if (word === "") return randomSentence(data);
+
+    let register = [];
+    for (const column in data) {
+        if (column === "version") continue;
+        data[column].forEach(({ text }, index) => {
+            if (text.includes(word)) {
+                register.push({ col: Number(column), index: index });
+            }
+        });
+    }
+
+    function generate(cord = null, result, i = 0) {
+        if (i <= 5) {
+            const arr = cord.filter(obj => i === obj.col);
+            if (arr.length === 0) {
+                result.push(data[i][getRand(0, data[i].length - 1)].text);
+            } else {
+                result.push(data[i][arr[0].index].text);
+            }
+            generate(cord, result, i + 1);
+        }
+    }
+
+    const result = [];
+    generate(register, result)
+    return result.join(' ');
 }
 
-function getRand(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
