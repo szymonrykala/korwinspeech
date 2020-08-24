@@ -1,29 +1,34 @@
+const DATA_VERSION = "0.1";
+
 window.addEventListener('load', main);
 
 function main() {
     const textDiv = document.querySelector('#text');
 
     loadData((data) => {
-        // console.log(data);
-
         const sentenceData = getRandomText(data);
         let sentence = '';
-
         sentenceData.forEach(text => sentence += ` ${text.text}`);
-        // console.log(sentence, sentenceData);
+        
         textDiv.innerHTML = sentence;
     });
 }
 
 async function loadData(callback) {
-    const resp = await fetch("./data.json");
-    const data = await resp.json();
+    let data = JSON.parse(window.localStorage.getItem('korwinSpeechData'));
+    if (!data || data.version !== DATA_VERSION) {
+        const resp = await fetch("./data.json");
+        data = await resp.json();
+        window.localStorage.setItem('korwinSpeechData', JSON.stringify(data));
+        console.log("loaded from the web");
+    }
+    
     return callback(data);
 }
 
 function getRandomText(data) {
-    // think the bug is here 
-    const getPart = (data, part) => data[part][getRand(0, data[part].length)];
+    const getPart = (data, part) => data[part][getRand(0, data[part].length-1)];
+
     const sentence = [
         getPart(data, 0),
         getPart(data, 1),
