@@ -1,25 +1,49 @@
 <!DOCTYPE html>
 <html lang="pl">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" type="image/png" href="#" />
 
-        <script src="./index.js" async type="text/javascript"></script>
-        <title>kowrinspeech</title>
-    </head>
-    <body>
-        <header>
-            <h1>KORWIN<small>speech</small></h1>
-            <h3>Generator mowy Kowrina</h3>
-        </header>
-        <main>
-            <div id="text"></div>
-            <div><input type="text" name="word" id="word" /></div>
-            <div><button onclick="main()">Generate!</button></div>
-        </main>
-        <footer>
-            <p>Copyright Szymon Rykała &copy;</p>
-        </footer>
-    </body>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="#" />
+    <link rel="stylesheet" href="./source/style.css">
+    <script src="./source/index.js" async type="text/javascript"></script>
+    <title>KORWINspeech</title>
+</head>
+
+<body class="app">
+
+    <div class="info" onclick="handleDisclaimer(this)">i</div>
+    <div class="disclaimer">
+        <p>Strona powstała wyłącznie w celach <b>humorystycznych</b></p>
+    </div>
+
+    <header class="app__header">
+        <h1><span class="app--fontAccent">KORWIN</span> <small>speech</small></h1>
+        <h3>Generator mowy Kowrina</h3>
+    </header>
+
+    <div class="app_photo"></div>
+
+    <main class="app__body">
+
+        <div class="app__modes">
+            <span class="app__mode">auto</span>
+            <span class="app__mode">ręczny</span>
+        </div>
+
+        <blockquote class="app__text" site="https://konfederacja.pl">
+            <span id="text">Tutaj jest tekst wygenerowany jako korwina Lorem ipsum dolor sit amet consectetur
+                adipisicing elit. Est, tempora?</span>
+            <span class="app__speaker">📣</span>
+        </blockquote>
+
+        <div><input class="app__input" placeholder="keyword" type="text" name="word" id="word" /></div>
+        <button class="app__button" onclick="main()">🔥</button>
+    </main>
+
+    <footer class="app__footer">
+        <p>Copyright Szymon Rykała &copy;</p>
+    </footer>
+</body>
+
 </html>
