@@ -1,5 +1,5 @@
 # Korwin speech
-Application which generating sentences in Korwin style.
+Application which generate sentences in Korwin style.
 
 ## Changle Log
 
