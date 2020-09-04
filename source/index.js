@@ -1,4 +1,4 @@
-const DATA_VERSION = "0.1";
+const DATA_VERSION = "1";
 
 window.addEventListener('load', main);
 
@@ -20,7 +20,7 @@ const getRand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 async function loadData(callback) {
     let data = JSON.parse(window.localStorage.getItem('korwinSpeechData'));
     if (!data || data.version !== DATA_VERSION) {
-        const resp = await fetch("./data.json");
+        const resp = await fetch("./source/data.json");
         data = await resp.json();
         window.localStorage.setItem('korwinSpeechData', JSON.stringify(data));
         console.log("loaded from the web");
@@ -59,3 +59,20 @@ function sentenceWith(word = "", data) {
     return result.join(' ');
 }
 
+// ============ handling disclaimer ================
+window.addEventListener('load', () => {
+    let info = document.querySelector('.info');
+
+    if (!window.localStorage.getItem('disclaimer')) {
+        setTimeout(() => handleDisclaimer(info), 2000);
+        window.localStorage.setItem('disclaimer', 'true');
+    }
+})
+
+function handleDisclaimer(info) {
+    let disclaimerStyle = document.querySelector('.disclaimer').style;
+    const opacity = disclaimerStyle.opacity;
+
+    disclaimerStyle.opacity = (opacity == "1") ? '0' : '1';
+    info.style.backgroundColor = (opacity == '1') ? "var(--main)" : "var(--accent)";
+}
