@@ -1,4 +1,4 @@
-const DATA_VERSION = "0.1";
+const DATA_VERSION = "1";
 
 window.addEventListener('load', main);
 
